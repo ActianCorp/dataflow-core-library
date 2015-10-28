@@ -40,8 +40,8 @@ The core-library tree is a collection of useful DataFlow Operators and miscellan
 
 * Other functions
 
-     An example 'ROT13' implementation for use in *Derive Fields*.
-     An example 'UUID' implementation for use in *Derive Fields*.
+     * An example 'ROT13' implementation for use in *Derive Fields*.
+     * An example 'UUID' implementation for use in *Derive Fields*.
 
 ## Configuration
 
