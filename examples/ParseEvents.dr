@@ -1,0 +1,257 @@
+{
+  "settings" : {
+    "name" : "CustomOperators",
+    "relativePath" : "CustomOperators"
+  },
+  "operators" : {
+    "Read events" : {
+      "operator" : {
+        "@type" : "readDelimitedText",
+        "charset" : "UTF-8",
+        "fieldDelimiter" : "\"",
+        "fieldSeparator" : ",",
+        "header" : true,
+        "readOnClient" : true,
+        "schema" : {
+          "@type" : "TextRecord",
+          "defaults" : {
+            "nullIndicator" : "",
+            "stringHandling" : "NULLABLE_RAW"
+          },
+          "textFields" : [ {
+            "name" : "EVENT_DATE",
+            "type" : {
+              "@type" : "FORMATTED_TIMESTAMP",
+              "formatting" : {
+                "pattern" : "yyyyMMddHHmm"
+              },
+              "nullIndicator" : ""
+            },
+            "domain" : {
+            }
+          }, {
+            "name" : "EVENT_TYPE",
+            "type" : {
+              "@type" : "STRING",
+              "behavior" : "NULLABLE_RAW",
+              "nullIndicator" : ""
+            },
+            "domain" : {
+            }
+          }, {
+            "name" : "EVENT_USER",
+            "type" : {
+              "@type" : "STRING",
+              "behavior" : "NULLABLE_RAW",
+              "nullIndicator" : ""
+            },
+            "domain" : {
+            }
+          }, {
+            "name" : "EVENT_MESSAGE",
+            "type" : {
+              "@type" : "STRING",
+              "behavior" : "NULLABLE_RAW",
+              "nullIndicator" : ""
+            },
+            "domain" : {
+            }
+          } ]
+        },
+        "selectedFields" : [ "EVENT_DATE", "EVENT_TYPE", "EVENT_USER", "EVENT_MESSAGE" ],
+        "source" : {
+          "@type" : "GlobbingByteSource",
+          "pattern" : "https://raw.githubusercontent.com/ActianCorp/core-library/master/examples/events.txt"
+        }
+      }
+    },
+    "Sessionize" : {
+      "operator" : {
+        "@type" : "sessionize",
+        "interval" : 7200000,
+        "keyColumn" : "EVENT_USER",
+        "parallelismDisabled" : false,
+        "timeColumn" : "EVENT_DATE"
+      }
+    },
+    "Present with lead/lag" : {
+      "operator" : {
+        "@type" : "leadLag",
+        "keys" : [ "EVENT_USER", "session_id" ],
+        "orderAscending" : true,
+        "parallelismDisabled" : false,
+        "valueField" : "EVENT_DATE"
+      }
+    },
+    "Count Logins" : {
+      "operator" : {
+        "@type" : "group",
+        "aggregations" : [ {
+          "aggregator" : {
+            "@type" : "sum"
+          },
+          "functions" : [ {
+            "function" : {
+              "description" : {
+                "name" : "Conditionals.ifThenElse",
+                "bounds" : [ {
+                  "type" : "boolean"
+                }, {
+                  "type" : "scalar"
+                }, {
+                  "type" : "scalar"
+                } ],
+                "typer" : {
+                  "@class" : "com.pervasive.datarush.functions.WidestInputTyper",
+                  "bound" : {
+                    "type" : "scalar"
+                  },
+                  "indices" : [ 1, 2 ]
+                },
+                "factory" : {
+                  "@class" : "com.pervasive.datarush.functions.ReflectiveFactory",
+                  "evaluator" : "com.pervasive.datarush.functions.evaluators.IfThenElse"
+                }
+              },
+              "arguments" : [ [ "com.pervasive.datarush.functions.ScalarFunctionInstance", {
+                "description" : {
+                  "name" : "Predicates.eq",
+                  "typer" : {
+                    "@class" : "com.pervasive.datarush.functions.Predicates$Comparable"
+                  },
+                  "factory" : {
+                    "@class" : "com.pervasive.datarush.functions.ReflectiveFactory",
+                    "evaluator" : "com.pervasive.datarush.functions.evaluators.Eq"
+                  }
+                },
+                "arguments" : [ [ "com.pervasive.datarush.functions.FieldReference", "EVENT_TYPE" ], [ "com.pervasive.datarush.functions.ConstantReference", [ "string", "LOGIN" ] ] ]
+              } ], [ "com.pervasive.datarush.functions.ConstantReference", [ "int", 1 ] ], [ "com.pervasive.datarush.functions.ConstantReference", [ "int", 0 ] ] ]
+            }
+          } ],
+          "as" : "login_events"
+        } ],
+        "keys" : [ "EVENT_USER" ]
+      }
+    },
+    "Start Node" : {
+      "operator" : {
+        "@type" : "com.actian.services.dataflow.operators.MockableExternalRecordSource",
+        "parallelismDisabled" : false,
+        "parameterFile" : "",
+        "properties" : {
+          "name" : "Bob"
+        }
+      }
+    },
+    "Filter Session" : {
+      "operator" : {
+        "@type" : "com.pervasive.datarush.operators.join.internal.FilteredJoin",
+        "joinCondition" : null,
+        "joinKeys" : [ {
+          "leftName" : "EVENT_USER",
+          "rightName" : "name"
+        } ],
+        "joinMode" : "RIGHT_OUTER",
+        "leftFieldNames" : [ "EVENT_DATE", "EVENT_TYPE", "EVENT_USER", "EVENT_MESSAGE", "session_id" ],
+        "mergeLeftAndRightKeys" : false,
+        "parallelismDisabled" : false,
+        "rightFieldNames" : [ "name" ],
+        "useHashJoinHint" : true
+      }
+    },
+    "Select Parameters" : {
+      "operator" : {
+        "@type" : "remapFields",
+        "fieldRemapping" : [ "RemapFields.reorder", {
+          "dropUnmappedFields" : true,
+          "directives" : [ {
+            "sourceName" : "name",
+            "targetName" : "name"
+          } ]
+        } ],
+        "parallelismDisabled" : false
+      }
+    },
+    "Limit Output" : {
+      "operator" : {
+        "@type" : "remapFields",
+        "fieldRemapping" : [ "RemapFields.reorder", {
+          "dropUnmappedFields" : true,
+          "directives" : [ {
+            "sourceName" : "name",
+            "targetName" : "EVENT_USER"
+          }, {
+            "sourceName" : "EVENT_DATE",
+            "targetName" : "EVENT_DATE"
+          }, {
+            "sourceName" : "EVENT_TYPE",
+            "targetName" : "EVENT_TYPE"
+          }, {
+            "sourceName" : "EVENT_MESSAGE",
+            "targetName" : "EVENT_MESSAGE"
+          }, {
+            "sourceName" : "session_id",
+            "targetName" : "session_id"
+          }, {
+            "sourceName" : "EVENT_USER",
+            "targetName" : ""
+          } ]
+        } ],
+        "parallelismDisabled" : false
+      }
+    },
+    "Stop Node" : {
+      "operator" : {
+        "@type" : "com.actian.services.dataflow.operators.MockableExternalRecordSink",
+        "parallelismDisabled" : false
+      }
+    },
+    "Log Rows" : {
+      "operator" : {
+        "@type" : "logRows",
+        "format" : "row {0} is {1}",
+        "logFrequency" : 1,
+        "parallelismDisabled" : false
+      }
+    },
+    "Log Rows_2" : {
+      "operator" : {
+        "@type" : "logRows",
+        "format" : "row {0} is {1}",
+        "logFrequency" : 1,
+        "parallelismDisabled" : false
+      }
+    }
+  },
+  "connections" : [ {
+    "from" : "CustomOperators.Read events.outputs.output",
+    "to" : "CustomOperators.Sessionize.inputs.input"
+  }, {
+    "from" : "CustomOperators.Sessionize.outputs.output",
+    "to" : "CustomOperators.Present with lead/lag.inputs.input"
+  }, {
+    "from" : "CustomOperators.Sessionize.outputs.output",
+    "to" : "CustomOperators.Count Logins.inputs.input"
+  }, {
+    "from" : "CustomOperators.Sessionize.outputs.output",
+    "to" : "CustomOperators.Filter Session.inputs.left"
+  }, {
+    "from" : "CustomOperators.Present with lead/lag.outputs.output",
+    "to" : "CustomOperators.Log Rows.inputs.input"
+  }, {
+    "from" : "CustomOperators.Count Logins.outputs.output",
+    "to" : "CustomOperators.Log Rows_2.inputs.input"
+  }, {
+    "from" : "CustomOperators.Start Node.outputs.output",
+    "to" : "CustomOperators.Select Parameters.inputs.input"
+  }, {
+    "from" : "CustomOperators.Select Parameters.outputs.output",
+    "to" : "CustomOperators.Filter Session.inputs.right"
+  }, {
+    "from" : "CustomOperators.Filter Session.outputs.output",
+    "to" : "CustomOperators.Limit Output.inputs.input"
+  }, {
+    "from" : "CustomOperators.Limit Output.outputs.output",
+    "to" : "CustomOperators.Stop Node.inputs.input"
+  } ]
+}
