@@ -1,10 +1,10 @@
-# df-xpath
+# core-library 
 
-The df-xpath tree is an Actian DataFlow operator for querying XML data.
+The core-library tree is a miscellaneous collection of useful DataFlow Operators
 
 ## Configuration
 
-Before building df-xpath you need to define the following environment variables to point to the local DataFlow update site [dataflow-p2-site](https://github.com/ActianCorp/dataflow-p2-site) root directory and the DataFlow version.
+Before building core-library you need to define the following environment variables to point to the local DataFlow update site [dataflow-p2-site](https://github.com/ActianCorp/dataflow-p2-site) root directory and the DataFlow version.
 
     export DATAFLOW_REPO_HOME=/Users/myuser/dataflow-p2-site
     export DATAFLOW_VER=6.5.2.112
@@ -24,13 +24,13 @@ You can update the version number by running
 where version is of the form x.y.z or x.y.z-SNAPSHOT.
     
 
-## Using the XPath operator with the DataFlow Engine
+## Using the operators with the DataFlow Engine
 
 The build generates a JAR file in the target directory under
-[df-xpath/DataflowExtensions](https://github.com/ActianCorp/df-xpath/tree/master/DataflowExtensions)
+[core-library/DataflowExtensions](https://github.com/ActianCorp/core-library/tree/master/DataflowExtensions)
 with a name similar to 
 
-    xpath-dataflow-1.y.z.jar
+    core-dataflow-1.y.z.jar
 
 which can be included on the classpath when using the DataFlow engine.
 
@@ -38,14 +38,12 @@ which can be included on the classpath when using the DataFlow engine.
 
 The build also produces a ZIP file which can be used as an archive file with the KNIME 'Help/Install New Software...' dialog.
 The ZIP file can be found in the target directory under
-[df-xpath/KnimeExtensions/Knime-Update](https://github.com/ActianCorp/df-xpath/tree/master/KnimeExtensions/Knime-Update) 
+[core-library/KnimeExtensions/Knime-Update](https://github.com/ActianCorp/core-library/tree/master/KnimeExtensions/Knime-Update) 
 and with a name like 
 
 
-    com.actian.services.knime.xpath.update-1.y.z.zip
+    com.actian.services.knime.core.update-1.y.z.zip
  
 ## Limitations and Reservations
 
-Expressions are limited to XPath 1.0 expressions.
-
-Only tested against DF 6.5.1.115 and KNIME 2.9.4 on Windows 7
+TBD
