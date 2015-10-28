@@ -38,10 +38,10 @@ The core-library tree is a collection of useful DataFlow Operators and miscellan
 
      An example node which allows multiple independent streams of data to be joined without specifying any join conditions.
 
- * Other functions
+* Other functions
 
-   An example 'ROT13' implementation for use in *Derive Fields*.
-   An example 'UUID' implementation for use in *Derive Fields*.
+     An example 'ROT13' implementation for use in *Derive Fields*.
+     An example 'UUID' implementation for use in *Derive Fields*.
 
 ## Configuration
 
