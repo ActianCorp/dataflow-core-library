@@ -20,6 +20,8 @@ import com.pervasive.datarush.annotations.PortDescription;
 import com.pervasive.datarush.graphs.EngineConfig;
 import com.pervasive.datarush.graphs.LogicalGraph;
 import com.pervasive.datarush.graphs.LogicalGraphInstance;
+import com.pervasive.datarush.io.FileClient;
+import com.pervasive.datarush.io.Paths;
 import com.pervasive.datarush.json.JSON;
 import com.pervasive.datarush.operators.AbstractExecutableRecordPipeline;
 import com.pervasive.datarush.operators.ExecutionContext;
@@ -36,7 +38,9 @@ import com.pervasive.datarush.ports.record.RecordPort;
 import com.pervasive.datarush.tokens.scalar.StringValued;
 import com.pervasive.datarush.types.RecordTokenType;
 import com.pervasive.datarush.types.TokenTypeConstant;
+import com.pervasive.datarush.util.FileUtil;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,11 +85,10 @@ public class SubJobExecutor extends AbstractExecutableRecordPipeline {
         while (inputRec.stepNext()) {
             JSON json = new JSON();
             LogicalGraph graph = null;
-            try {
-                String fileURL = ((StringInputField)inputRec.getField(0)).asString();
-                FileReader fileReader = new FileReader(fileURL);
+            String fileURL = ((StringInputField)inputRec.getField(0)).asString();
+            try (InputStream is = ctx.getFileClient().newInputStream(Paths.asPath(fileURL))) {
                 ObjectMapper mapper = new ObjectMapper();
-                JsonNode root = mapper.readTree(fileReader);
+                JsonNode root = mapper.readTree(is);
                 JsonNode graphNode = root.findPath("logicalGraph");
                 graphNode = graphNode.isMissingNode() ? root : graphNode;
                 // Find all nodes which are have @type : "readFromJDBC"
@@ -159,7 +162,7 @@ public class SubJobExecutor extends AbstractExecutableRecordPipeline {
                     gi.join();
                 }
             } catch (Exception ex) {
-
+                throw new DRException(ex.getMessage());
             }
         }
         outputRec.pushEndOfData();
