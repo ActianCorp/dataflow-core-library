@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2015 Actian Corporation
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!DOCTYPE knimeNode PUBLIC "-//UNIKN//DTD KNIME Node 2.0//EN" "http://www.knime.org/Node.dtd">
+<knimeNode icon="./DefaultDRNodeIcon.png" type="Manipulator">
+    <name>Derive Group</name>
+    <shortDescription>A more advanced user version of the Group node.</shortDescription>
+    <fullDescription>
+        <intro>
+            <p>The Derive Group node aggregates data within key groups. It differs primarily from the 'Group' node
+            in that you can specify more complex aggregations than provided by that nodes configuration dialog, and
+            allows the use of any custom written aggregation functions.</p>
+            <p>
+            The node uses groups of consecutive equal keys ("key groups") to determine which data
+            values to aggregate. The input data not be sorted; if it is already sorted, performance
+            will be optimal.</p>
+            <p>
+            The output of the Derive Group node will include the key fields (if specified) and the outcome
+            of each aggregation function. A row of output is generated for each distinct set of key values.
+            If no key fields are specified, a single row will be output with the aggregation results for all
+            input rows.</p>
+		</intro>
+		<option name="Aggregations">
+		    Aggregation functions can be applied to data fields within the input data source.<br/>Enter a comma-seperated
+		    list of aggregations in the DataFlow Expression language.<br/>
+		    See <a href="http://help.pervasive.com/display/DF651/Expression+Language#ExpressionLanguage-AggregateFunctions">Aggregate Functions</a>
+		</option>
+		<option name="Keys">
+		    The key fields, if any, used to define key groups for aggregation.
+		</option>
+	</fullDescription>
+	
+    <ports>
+       <inPort index="0" name="input">Input data to aggregate.</inPort>
+       <outPort index="0" name="output">Output data containing aggregation results.</outPort>
+	</ports>
+	
+</knimeNode>

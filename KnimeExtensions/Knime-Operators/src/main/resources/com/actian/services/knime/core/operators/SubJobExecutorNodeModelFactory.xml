@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2015 Actian Corporation
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!DOCTYPE knimeNode PUBLIC "-//UNIKN//DTD KNIME Node 2.0//EN" "http://www.knime.org/Node.dtd">
+<knimeNode icon="./DefaultDRNodeIcon.png" type="Manipulator">
+    <name>SubJob Executor</name>
+    <shortDescription>Executes a Dataflow graph.</shortDescription>
+    <fullDescription>
+        <intro>
+            <p>Executes a dataflow graph.</p>
+            <p>The graph is executed per row of data entering the node. The first
+               field contains the file location of the datarush .dr file to execute.</p>
+
+            <p>Additional fields are passed into the 'Start Node' of the workflow if
+               such a node has been defined. Any outputs from a 'Stop Node' within the
+               workflow will be copied into the output schema.</p>
+
+            <p>If the node is executing within a Dataflow execution engine, then the same
+               config will be applied to the child execution, otherwise the default
+               engine configuration will be used.</p>
+		</intro>
+        <option name="Output Schema">
+            <p>
+            Define the output schema for the workflow.
+            </p>
+            <p>
+            Tip. If the workflow to be executed has already been written, attach
+            a 'Delimited Text Writer' node, and use 'Edit Schema/Save Schema...' to save
+            the schema definition to a file, and reload it via this nodes configuration
+            dialog.</p>
+        </option>
+	</fullDescription>
+	
+    <ports>
+       <inPort index="0" name="input">Input data.</inPort>
+       <inPort index="1" name="overrides">Graph Overrides in name/value format</inPort>
+       <outPort index="0" name="output">Output data.</outPort>
+	</ports>
+	
+</knimeNode>

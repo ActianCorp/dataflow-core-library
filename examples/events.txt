@@ -1,0 +1,12 @@
+EVENT_DATE,EVENT_TYPE,EVENT_USER,EVENT_MESSAGE
+201510260900,LOGIN,Gary,User has logged into 'herring'
+201510260900,LOGIN,John,User has logged into 'salmon'
+201510260901,EMAIL,John,27 Emails downloaded.
+201510260930,RESET,John,Password reset request for user on machine 'haddock'
+201510261000,RESET,John,Password reset for user on 'haddock'
+201510261100,LOGOUT,John,User logged out of 'salmon'
+201510261300,LOGIN,John,Incorrect password supplied for user on 'haddock'
+201510261305,LOGIN,John,User has logged into 'haddock'
+201510261500,LOGIN,John,User has logged into 'salmon'
+201510270800,LOGIN,Susan,User has logged into 'mayflower'
+201510270857,LOGIN,John,User has logged into 'salmon'

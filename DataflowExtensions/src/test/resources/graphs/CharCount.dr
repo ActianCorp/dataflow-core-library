@@ -1,0 +1,152 @@
+{
+  "settings" : {
+    "name" : "Test_StartStop",
+    "relativePath" : "Test_StartStop"
+  },
+  "operators" : {
+    "Derive Fields" : {
+      "operator" : {
+        "@type" : "deriveFields",
+        "derivedFields" : [ {
+          "@type" : "field",
+          "name" : "charCount",
+          "function" : {
+            "function" : {
+              "description" : {
+                "name" : "Conversions.toString",
+                "typer" : {
+                  "@class" : "com.pervasive.datarush.functions.FixedType",
+                  "type" : {
+                    "type" : "string"
+                  }
+                },
+                "factory" : {
+                  "@class" : "com.pervasive.datarush.functions.ReflectiveFactory",
+                  "evaluator" : "com.pervasive.datarush.functions.evaluators.ConvertToString"
+                }
+              },
+              "arguments" : [ [ "com.pervasive.datarush.functions.ScalarFunctionInstance", {
+                "description" : {
+                  "name" : "Strings.length",
+                  "bounds" : [ {
+                    "type" : "string"
+                  } ],
+                  "typer" : {
+                    "@class" : "com.pervasive.datarush.functions.FixedType",
+                    "type" : {
+                      "type" : "int"
+                    }
+                  },
+                  "factory" : {
+                    "@class" : "com.pervasive.datarush.functions.ReflectiveFactory",
+                    "evaluator" : "com.pervasive.datarush.functions.evaluators.Length"
+                  }
+                },
+                "arguments" : [ [ "com.pervasive.datarush.functions.FieldReference", "body" ] ]
+              } ] ]
+            }
+          }
+        }, {
+          "@type" : "field",
+          "name" : "rot13ed",
+          "function" : {
+            "function" : {
+              "description" : {
+                "name" : "Miscellaneous.rot13",
+                "typer" : {
+                  "@class" : "com.pervasive.datarush.functions.FixedType",
+                  "type" : {
+                    "type" : "string"
+                  }
+                },
+                "factory" : {
+                  "@class" : "com.pervasive.datarush.functions.ReflectiveFactory",
+                  "evaluator" : "com.actian.services.dataflow.functions.evaluators.Rot13"
+                }
+              },
+              "arguments" : [ [ "com.pervasive.datarush.functions.FieldReference", "body" ] ]
+            }
+          }
+        }, {
+          "@type" : "field",
+          "name" : "unrot13",
+          "function" : {
+            "function" : {
+              "description" : {
+                "name" : "Miscellaneous.rot13",
+                "typer" : {
+                  "@class" : "com.pervasive.datarush.functions.FixedType",
+                  "type" : {
+                    "type" : "string"
+                  }
+                },
+                "factory" : {
+                  "@class" : "com.pervasive.datarush.functions.ReflectiveFactory",
+                  "evaluator" : "com.actian.services.dataflow.functions.evaluators.Rot13"
+                }
+              },
+              "arguments" : [ [ "com.pervasive.datarush.functions.FieldReference", "rot13ed" ] ]
+            }
+          }
+        }, {
+          "@type" : "field",
+          "name" : "testInt",
+          "function" : {
+            "constant" : [ "int", 1 ]
+          }
+        }, {
+          "@type" : "field",
+          "name" : "testNumeric",
+          "function" : {
+            "constant" : [ "numeric", 3.1410000000000000142108547152020037174224853515625 ]
+          }
+        }, {
+          "@type" : "field",
+          "name" : "testTimestamp",
+          "function" : {
+            "function" : {
+              "description" : {
+                "name" : "DateTime.currentTimestamp",
+                "typer" : {
+                  "@class" : "com.pervasive.datarush.functions.FixedType",
+                  "type" : {
+                    "type" : "timestamp"
+                  }
+                },
+                "factory" : {
+                  "@class" : "com.pervasive.datarush.functions.ReflectiveFactory",
+                  "evaluator" : "com.pervasive.datarush.functions.evaluators.CurrentTimestamp"
+                }
+              },
+              "arguments" : [ [ "java.util.TimeZone", "Europe/London" ] ]
+            }
+          }
+        } ]
+      }
+    },
+    "Start Node" : {
+      "operator" : {
+        "@type" : "com.actian.services.dataflow.operators.MockableExternalRecordSource",
+        "parallelismDisabled" : false,
+        "parameterFile" : "",
+        "properties" : {
+          "body" : "Orange is the new Black"
+        }
+      }
+    },
+    "Stop Node" : {
+      "operator" : {
+        "@type" : "com.actian.services.dataflow.operators.MockableExternalRecordSink",
+        "parallelismDisabled" : false
+      }
+    }
+  },
+  "connections" : [ {
+    "from" : "Test_StartStop.Start Node.outputs.output",
+    "to" : "Test_StartStop.Derive Fields.inputs.input"
+  }, {
+    "from" : "Test_StartStop.Derive Fields.outputs.output",
+    "to" : "Test_StartStop.Stop Node.inputs.input"
+  } ]
+}
+

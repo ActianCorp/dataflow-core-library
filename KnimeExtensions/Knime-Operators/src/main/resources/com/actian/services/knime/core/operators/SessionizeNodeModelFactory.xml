@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2015 Actian Corporation
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!DOCTYPE knimeNode PUBLIC "-//UNIKN//DTD KNIME Node 2.0//EN" "http://www.knime.org/Node.dtd">
+<knimeNode icon="./SessionizeNodeIcon.png" type="Manipulator">
+    <name>Sessionize</name>
+    <shortDescription>Sessionize data</shortDescription>
+    <fullDescription>
+        <intro>
+            <p>Assigns a session ID to incoming data where the ID corresponds to a grouping
+               of data has a period of greater than the specified interval between its
+               neighbours. The most recent group has a session ID of 1, the next most
+               recent 2 and so on.</p>
+		</intro>
+		<option name="Key Column">
+		    Column to group within for sessions
+		</option>
+		<option name="Time Column">
+		    Timestamp of data used for sessionizing.
+		</option>
+	</fullDescription>
+	
+    <ports>
+       <inPort index="0" name="input">Input data</inPort>
+       <outPort index="0" name="output">Output data</outPort>
+	</ports>
+	
+</knimeNode>

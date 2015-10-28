@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+    <extension point="org.knime.workbench.repository.categories">
+        <category description="Components written by Actian Services" icon="icons/actian-16x16.png" level-id="ActianServices" name="Actian Services" path="/"/>
+        <category description="Dataflow Launcher" icon="icons/actian-16x16.png" level-id="DataFlowLauncher" name="Dataflow Launcher" path="/ActianServices/"/>
+    </extension>
+   
+    <extension point="org.knime.workbench.repository.nodes">
+        <node category-path="/ActianServices/DataFlowLauncher" factory-class="com.actian.services.knime.core.operators.MockableExternalRecordSourceNodeModelFactory" id="com.actian.services.knime.core.operators.MockableExternalRecordSourceNodeModelFactory"/>
+        <node category-path="/ActianServices/DataFlowLauncher" factory-class="com.actian.services.knime.core.operators.MockableExternalRecordSinkNodeModelFactory" id="com.actian.services.knime.core.operators.MockableExternalRecordSinkNodeModelFactory"/>
+        <node category-path="/ActianServices" factory-class="com.actian.services.knime.core.operators.DeriveGroupNodeModelFactory" id="com.actian.services.knime.core.operators.DeriveGroupNodeModelFactory"/>
+        <node category-path="/ActianServices" factory-class="com.actian.services.knime.core.operators.SessionizeNodeModelFactory" id="com.actian.services.knime.core.operators.SessionizeNodeModelFactory"/>
+        <node category-path="/ActianServices/DataFlowLauncher" factory-class="com.actian.services.knime.core.operators.ZipRowsNodeModelFactory" id="com.actian.services.knime.core.operators.ZipRowsNodeModelFactory"/>
+        <node category-path="/ActianServices" factory-class="com.actian.services.knime.core.operators.XPathTableNodeModelFactory" id="com.actian.services.knime.core.operators.XPathTableNodeModelFactory"/>
+        <node category-path="/ActianServices" factory-class="com.actian.services.knime.core.operators.LeadLagNodeModelFactory" id="com.actian.services.knime.core.operators.LeadLagNodeModelFactory"/>
+        <node category-path="/ActianServices/DataFlowLauncher" factory-class="com.actian.services.knime.core.operators.SubJobExecutorNodeModelFactory" id="com.actian.services.knime.core.operators.SubJobExecutorNodeModelFactory"/>
+    </extension>
+
+</plugin>
