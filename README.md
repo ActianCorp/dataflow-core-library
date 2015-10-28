@@ -1,6 +1,47 @@
 # core-library 
 
-The core-library tree is a miscellaneous collection of useful DataFlow Operators
+The core-library tree is a collection of useful DataFlow Operators and miscellaneous examples.
+
+##Operator list
+
+* Start Node
+
+     A node which has an optional input port intended to send input parameters to.
+
+* Stop Node
+
+     A node which has an optional output port intended to return a set of data.
+
+* SubJob Executor Node
+
+     A node which can call an exported DataFlow graph (a .dr file in JSON format), passing
+     inputs into the workflows *Start Node* (if exists), and outputing data from the 
+     workflows *Stop Node*.
+
+* Sessionize Node
+
+     A node which groups timestamped data into 'sessions' with custom time intervals.
+
+* Derive Group Node
+
+     A different UI on top of the existing 'Group' operator. This version allows the
+     aggregations to entered as text expressions.
+
+     Additionally, custom aggregates can now be used in KNIME, e.g. The 'concat' aggregator
+     supplied as an example.
+
+* Lead Lag Node
+
+     An example node which re-presents timestamped data with lead/lag values on the same row.
+
+* Zip Rows Node
+
+     An example node which allows multiple independent streams of data to be joined without specifying any join conditions.
+
+ * Other functions
+
+   An example 'ROT13' implementation for use in *Derive Fields*.
+   An example 'UUID' implementation for use in *Derive Fields*.
 
 ## Configuration
 
@@ -34,7 +75,7 @@ with a name similar to
 
 which can be included on the classpath when using the DataFlow engine.
 
-## Installing the XPath operator in KNIME
+## Installing the operators in KNIME
 
 The build also produces a ZIP file which can be used as an archive file with the KNIME 'Help/Install New Software...' dialog.
 The ZIP file can be found in the target directory under
@@ -44,6 +85,3 @@ and with a name like
 
     com.actian.services.knime.core.update-1.y.z.zip
  
-## Limitations and Reservations
-
-TBD
